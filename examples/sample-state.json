@@ -1,0 +1,39 @@
+{
+  "version": "Ω∞",
+  "intent": {
+    "raw_request": "Replace only the background while preserving the person exactly.",
+    "normalized_intent": "Background replacement with subject invariance.",
+    "primary_goal": "Replace environment",
+    "secondary_goals": [],
+    "creative_boundary": "No unrelated changes"
+  },
+  "references": {
+    "items": [
+      {"id":"ref-person","role":"IDENTITY_SOURCE","authority":"authoritative"},
+      {"id":"ref-environment","role":"ENVIRONMENT_SOURCE","authority":"authoritative"}
+    ],
+    "identity_source": "ref-person",
+    "conflicts": [],
+    "resolution_strategy": "Preserve rather than invent"
+  },
+  "state": {
+    "source": {"subject":"existing person","background":"existing environment"},
+    "locked": ["identity","face","body","wardrobe","pose","subject count"],
+    "modified": ["background"],
+    "removed": [],
+    "added": ["target environment"],
+    "derived": ["contact shadow","reflected light","edge integration","color spill"]
+  },
+  "subject": {"count":1,"identity":"ref-person","identity_lock":true},
+  "constraints": {
+    "negative":["no extra people","no identity drift","no wardrobe change","no pose change"],
+    "change_budget":"LOCAL",
+    "edit_scope":"background only",
+    "immutable_elements":["subject"],
+    "secondary_changes_allowed":["physical integration only"],
+    "global_regeneration":false,
+    "attention":{"critical":["identity","subject count","edit scope"],"high":["lighting","edges","shadows"],"medium":[],"low":[]}
+  },
+  "output":{"destination_model":"generic","medium":"photographic"},
+  "validation":{"passed":false,"checks":{},"risks":[],"recompile_required":false}
+}
