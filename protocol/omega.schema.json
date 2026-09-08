@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://wao-ai-2.dev/schema/omega.schema.json",
+  "title": "WDA Ω∞ Visual State",
+  "type": "object",
+  "required": ["version", "intent", "references", "state", "constraints", "output"],
+  "properties": {
+    "version": {"type": "string"},
+    "intent": {"$ref": "#/definitions/intent"},
+    "references": {"$ref": "#/definitions/references"},
+    "state": {"$ref": "#/definitions/state"},
+    "constraints": {"$ref": "#/definitions/constraints"},
+    "subject": {"$ref": "#/definitions/subject"},
+    "pose": {"type": "object"},
+    "composition": {"type": "object"},
+    "environment": {"type": "object"},
+    "lighting": {"type": "object"},
+    "camera": {"type": "object"},
+    "materials": {"type": "object"},
+    "color": {"type": "object"},
+    "compositing": {"type": "object"},
+    "typography": {"type": "object"},
+    "output": {"$ref": "#/definitions/output"},
+    "validation": {"$ref": "#/definitions/validation"}
+  },
+  "definitions": {
+    "intent": {
+      "type": "object",
+      "required": ["raw_request", "primary_goal"],
+      "properties": {
+        "raw_request": {"type": "string"},
+        "normalized_intent": {"type": "string"},
+        "primary_goal": {"type": "string"},
+        "secondary_goals": {"type": "array", "items": {"type": "string"}},
+        "creative_boundary": {"type": "string"}
+      }
+    },
+    "reference": {
+      "type": "object",
+      "required": ["id", "role"],
+      "properties": {
+        "id": {"type": "string"},
+        "role": {"enum": ["IDENTITY_SOURCE","FACE_SOURCE","BODY_SOURCE","POSE_SOURCE","COMPOSITION_SOURCE","CAMERA_SOURCE","ENVIRONMENT_SOURCE","BACKGROUND_SOURCE","WARDROBE_SOURCE","MATERIAL_SOURCE","LIGHTING_SOURCE","COLOR_SOURCE","TYPOGRAPHY_SOURCE","STYLE_SOURCE","DETAIL_SOURCE"]},
+        "authority": {"enum": ["authoritative","supporting","contextual"]},
+        "notes": {"type": "string"}
+      }
+    },
+    "references": {
+      "type": "object",
+      "required": ["items"],
+      "properties": {
+        "items": {"type": "array", "items": {"$ref": "#/definitions/reference"}},
+        "identity_source": {"type": ["string", "null"]},
+        "conflicts": {"type": "array", "items": {"type": "string"}},
+        "resolution_strategy": {"type": "string"}
+      }
+    },
+    "state": {
+      "type": "object",
+      "required": ["source", "locked", "modified", "removed", "added", "derived"],
+      "properties": {
+        "source": {"type": "object"},
+        "locked": {"type": "array", "items": {"type": "string"}},
+        "modified": {"type": "array", "items": {"type": "string"}},
+        "removed": {"type": "array", "items": {"type": "string"}},
+        "added": {"type": "array", "items": {"type": "string"}},
+        "derived": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "required": ["negative", "change_budget", "attention"],
+      "properties": {
+        "negative": {"type": "array", "items": {"type": "string"}},
+        "change_budget": {"enum": ["MICRO","LOCAL","REGIONAL","GLOBAL","CREATIVE_REBUILD"]},
+        "edit_scope": {"type": "string"},
+        "immutable_elements": {"type": "array", "items": {"type": "string"}},
+        "secondary_changes_allowed": {"type": "array", "items": {"type": "string"}},
+        "global_regeneration": {"type": "boolean"},
+        "attention": {"type": "object", "properties": {
+          "critical": {"type": "array", "items": {"type": "string"}},
+          "high": {"type": "array", "items": {"type": "string"}},
+          "medium": {"type": "array", "items": {"type": "string"}},
+          "low": {"type": "array", "items": {"type": "string"}}
+        }}
+      }
+    },
+    "subject": {
+      "type": "object",
+      "properties": {
+        "count": {"type": ["integer", "null"], "minimum": 0},
+        "identity": {"type": "string"},
+        "identity_lock": {"type": "boolean"}
+      }
+    },
+    "output": {
+      "type": "object",
+      "required": ["destination_model"],
+      "properties": {
+        "destination_model": {"type": "string"},
+        "orientation": {"type": "string"},
+        "aspect_ratio": {"type": "string"},
+        "resolution": {"type": "string"},
+        "medium": {"type": "string"},
+        "aesthetic": {"type": "string"}
+      }
+    },
+    "validation": {
+      "type": "object",
+      "properties": {
+        "passed": {"type": "boolean"},
+        "checks": {"type": "object"},
+        "risks": {"type": "array", "items": {"type": "string"}},
+        "recompile_required": {"type": "boolean"}
+      }
+    }
+  }
+}
