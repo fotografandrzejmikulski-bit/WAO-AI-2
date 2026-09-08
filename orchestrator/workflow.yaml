@@ -1,0 +1,50 @@
+version: "1.0"
+name: WDA-OMEGA-INFINITY
+mode: deterministic-constraint-first
+
+stages:
+  - id: intake
+    agents: [A01]
+    output: intent
+  - id: reference-mapping
+    agents: [A02]
+    depends_on: [intake]
+    output: reference_graph
+  - id: state-lock
+    agents: [A03, A04]
+    depends_on: [reference-mapping]
+    parallel: true
+    output: state
+  - id: scene-analysis
+    agents: [A05, A06, A09]
+    depends_on: [state-lock]
+    parallel: true
+    output: spatial_scene
+  - id: technical-analysis
+    agents: [A07, A08, A10, A11, A12, A13, A14, A15, A16, A17]
+    depends_on: [scene-analysis]
+    parallel: true
+    output: technical_spec
+  - id: risk-analysis
+    agents: [A18, A21]
+    depends_on: [technical-analysis]
+    parallel: true
+    output: risk_register
+  - id: compile
+    agents: [A19]
+    depends_on: [risk-analysis]
+    output: destination_instruction
+  - id: final-gate
+    agents: [A20]
+    depends_on: [compile]
+    output: validated_result
+
+failure_policy:
+  max_recompile_cycles: 3
+  repair_scope: smallest_failed_domain
+  on_fail: recompile_from_last_valid_state
+  on_invariant_violation: hard_block
+
+state_machine:
+  states: [RECEIVED, NORMALIZED, MAPPED, LOCKED, ANALYZED, COMPILED, VALIDATING, RELEASED, BLOCKED]
+  terminal: [RELEASED, BLOCKED]
