@@ -1,0 +1,11 @@
+{
+  "name": "wao-ai-2",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "WDA Ω∞ multi-agent visual intelligence system",
+  "scripts": {
+    "test": "node --test",
+    "lint": "node --check orchestrator/engine.mjs"
+  }
+}
